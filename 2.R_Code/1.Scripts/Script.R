@@ -148,14 +148,15 @@ terra_aspect <- terrain(raster_terra, v = "aspect")
 # Creating a Raster Stack 
 terra_stack <- c(raster_terra,terra_slope,terra_tri,terra_aspect)
 plot(terra_stack)
+
 #        Reprojecting                                                       ####
 
 proj_string <- crs("+init=epsg:32632")
 
 projected_terraraster <- project(raster_terra, y = proj_string)
 
-
-#      Raysahder                                                            ####
+###############################################################################
+#      Rayshader                                                            ####
 
 landscape <- raster_to_matrix(raster_raster)
 
@@ -163,12 +164,14 @@ landscape <- landscape[c(1:300),c(1:300)]
 #We use another one of rayshader's built-in textures:
 landscape %>%
   sphere_shade(texture = "desert") %>%
-  add_shadow(ray_shade(elmat, zscale = 3), 0.5) %>%
-  add_shadow(ambient_shade(elmat), 0) %>%
-  plot_3d(elmat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
+  add_shadow(ray_shade(landscape, zscale = 3), 0.5) %>%
+  add_shadow(ambient_shade(landscape), 0) %>%
+  plot_3d(landscape, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
 
 ###############################################################################
 #   Resources                                                               ####
 
 # great sf book : https://geocompr.robinlovelace.net/index.html
 # rayshader     : https://github.com/tylermorganwall/rayshader
+# epsg codes    : https://spatialreference.org/
+# colorbrewer   : https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3
