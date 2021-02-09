@@ -33,6 +33,7 @@ plot(raster_raster)
 
 raster_terra  <- rast("1.Data\\ASTGTMV003_N00E010_dem.tif")
 plot(raster_terra)
+
 ###############################################################################
 #   Point Data / Polygons                                                   ####
 #      sp                                                                   ####
@@ -109,14 +110,18 @@ raster_ag_100fact <- raster::aggregate(raster_raster,
 
 # Creating Different Layers
 raster_slope <- raster::terrain(raster_raster, opt = "slope")
-raster_tri <- terrain(raster_raster, opt = "TRI")
-raster_aspect <- terrain(raster_raster, opt = "aspect")
+raster_tri <- raster::terrain(raster_raster, opt = "TRI")
+raster_aspect <- raster::terrain(raster_raster, opt = "aspect")
 
 
 # Creating a Raster Stack 
-raster_stack <- stack(raster_raster,raster_slope,terra_slope,raster_tri,raster_aspect)
+raster_stack <- stack(raster_raster,raster_slope,raster_tri,raster_aspect)
 plot(raster_stack)
 
+
+t <- raster::aggregate(raster_stack,
+                       fact = 100,
+                       fun = mean)
 #        Reprojecting                                                       ####
 
 proj_string <- crs("+init=epsg:32632")
@@ -171,7 +176,10 @@ landscape %>%
 ###############################################################################
 #   Resources                                                               ####
 
+# Earthdata     : https://search.earthdata.nasa.gov/search
 # great sf book : https://geocompr.robinlovelace.net/index.html
 # rayshader     : https://github.com/tylermorganwall/rayshader
 # epsg codes    : https://spatialreference.org/
 # colorbrewer   : https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3
+
+###############################################################################
